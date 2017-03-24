@@ -29,8 +29,12 @@ function build_bag(){
 	res.redirect('/p1');
 });*/
 
-router.route('/').get(function(req, res){
+/*router.route('/').get(function(req, res){
 	res.redirect('/login');
+});*/
+
+app.get('/', function(req, res){
+	res.render('login', { title: 'Hello - Please Login To Your Account' });
 });
 // ============================================================================================================================
 // Part 1
