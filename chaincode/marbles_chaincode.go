@@ -85,7 +85,19 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
-
+    //Write the User Id "mail Id" arg[0] and password arg[1]
+	userid := "1234"															//argument for UserID
+	password := "amit"  	//argument for password
+	str := `{"userid": "` + userid+ `", "password": "` + password + `"}`
+	
+	err = stub.PutState(userid, []byte(str))								//Put the userid and password in blockchain
+	if err != nil {
+		return nil, err
+	}
+	
+	
+//End of Changes for the Hertz Blockchain
+	
 	// Initialize the chaincode
 	Aval, err = strconv.Atoi(args[0])
 	if err != nil {
