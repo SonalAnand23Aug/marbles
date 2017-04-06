@@ -162,7 +162,9 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	// Handle different functions
 	if function == "read" {													//read a variable
 		return t.read(stub, args)
-	}
+	} else if function == "read_sysadmin" {									//Read system admin User id and password
+		return t.read_sysadmin(stub, args)
+	} 
 	fmt.Println("query did not find func: " + function)						//error
 
 	return nil, errors.New("Received unknown function query")
@@ -188,6 +190,37 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 
 	return valAsbytes, nil													//send it onward
 }
+
+//==============================================================================================================================
+// Read - query function to read key/value pair (System Admin read User id and Password)
+//===============================================================================================================================
+func (t *SimpleChaincode) read_sysadmin(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var err error
+
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting name of the key to query")
+	}
+
+	userid := args[0]
+	PassAsbytes, err := stub.GetState(userid)
+	
+	if err != nil {
+		jsonResp := "{\"Error\":\"Failed to get state for " + userid + "\"}"
+		return nil, errors.New(jsonResp)
+	}
+	
+	res := Adminlogin{}
+	json.Unmarshal(PassAsbytes,&res)
+	
+	if res.Userid == userid{
+	   fmt.Println("Userid Password Matched: " +res.Userid + res.Password)
+	  }else {
+	   fmt.Println("Wrong ID Password: " +res.Userid + res.Password)
+	   }
+	
+	return PassAsbytes, nil
+}
+
 
 // ============================================================================================================================
 // Delete - remove a key/value pair from state
