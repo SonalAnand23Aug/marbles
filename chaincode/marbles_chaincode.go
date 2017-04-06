@@ -60,6 +60,11 @@ type AllTrades struct{
 	OpenTrades []AnOpenTrade `json:"open_trades"`
 }
 
+type Adminlogin struct{
+	Userid string `json:"userid"`					//User login for system Admin
+	Password string `json:"password"`
+}
+
 // ============================================================================================================================
 // Main
 // ============================================================================================================================
